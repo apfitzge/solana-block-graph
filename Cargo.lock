@@ -2432,6 +2432,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
 
 [[package]]
+name = "prio-graph"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6492a75ca57066a4479af45efa302bed448680182b0563f96300645d5f896097"
+
+[[package]]
 name = "proc-macro-crate"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3207,6 +3213,9 @@ name = "solana-block-graph"
 version = "0.1.0"
 dependencies = [
  "clap 4.5.4",
+ "prio-graph",
+ "serde",
+ "serde_json",
  "solana-client",
  "solana-sdk",
  "solana-transaction-status",
