@@ -41,4 +41,5 @@ pub struct GraphiaInputNodeMetaData {
     pub num_signatures: usize,
     pub fee: u64,
     pub compute: u64,
+    pub depth: usize,
 }

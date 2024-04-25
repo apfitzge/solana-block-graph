@@ -120,13 +120,16 @@ fn main() {
     // Now pop from the graph to construct graphia input (json)
     let mut graphia_input = GraphiaInput::default();
     let mut edge_count: u32 = 0;
+    let mut depth: usize = 0;
     while !prio_graph.is_empty() {
         let mut popped = Vec::new();
+        depth += 1;
+
         while let Some(id) = prio_graph.pop() {
             popped.push(id);
 
             // Insert a new node into the graphia input graph.
-            let (tx, fee, cus) = &mut decoded_transactions[id.0];
+            let (tx, fee, cus) = &decoded_transactions[id.0];
             graphia_input.graph.nodes.push(GraphiaInputNode {
                 id: id.0.to_string(),
                 metadata: GraphiaInputNodeMetaData {
@@ -134,6 +137,7 @@ fn main() {
                     num_signatures: tx.signatures.len(),
                     fee: *fee,
                     compute: *cus,
+                    depth,
                 },
             });
         }
