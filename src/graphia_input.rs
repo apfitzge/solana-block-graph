@@ -25,13 +25,9 @@ impl Default for GraphiaInputGraph {
 #[derive(Serialize)]
 pub struct GraphiaInputEdge {
     pub id: String,
-    // metadata: GraphiaInputEdgeMetaData,
     pub source: String,
     pub target: String,
 }
-
-// #[derive(Serialize)]
-// struct GraphiaInputEdgeMetaData {}
 
 #[derive(Serialize)]
 pub struct GraphiaInputNode {
@@ -42,4 +38,7 @@ pub struct GraphiaInputNode {
 #[derive(Serialize)]
 pub struct GraphiaInputNodeMetaData {
     pub signature: String,
+    pub num_signatures: usize,
+    pub fee: u64,
+    pub compute: u64,
 }

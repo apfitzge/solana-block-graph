@@ -92,7 +92,9 @@ fn main() {
                 .map(|key| Pubkey::from_str(&key).expect("failed to parse key")),
         );
 
-        decoded_transactions.push(transaction);
+        let fee = meta.fee;
+        let cus = Option::<u64>::from(meta.compute_units_consumed.clone()).unwrap_or(0);
+        decoded_transactions.push((transaction, fee, cus));
 
         // Skip any votes. (TODO: Make this check more robust)
         if read_accounts.contains(&solana_sdk::vote::program::ID) {
@@ -117,11 +119,14 @@ fn main() {
             popped.push(id);
 
             // Insert a new node into the graphia input graph.
-            let tx = &decoded_transactions[id.0];
+            let (tx, fee, cus) = &mut decoded_transactions[id.0];
             graphia_input.graph.nodes.push(GraphiaInputNode {
                 id: id.0.to_string(),
                 metadata: GraphiaInputNodeMetaData {
                     signature: tx.signatures[0].to_string(),
+                    num_signatures: tx.signatures.len(),
+                    fee: *fee,
+                    compute: *cus,
                 },
             });
         }
@@ -134,7 +139,6 @@ fn main() {
                 if !prio_graph.is_blocked(target) {
                     graphia_input.graph.edges.push(GraphiaInputEdge {
                         id: edge_count.to_string(),
-                        // metadata: GraphiaInputEdgeMetaData {},
                         source: popped.0.to_string(),
                         target: target.0.to_string(),
                     });
