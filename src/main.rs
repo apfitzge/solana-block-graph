@@ -18,6 +18,9 @@ struct Cli {
     /// Output file path
     #[clap(long, short)]
     output: PathBuf,
+    /// Show all connected edges, not just final blocking edges.
+    #[clap(long, short)]
+    verbose: bool,
 }
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Hash)]
@@ -30,7 +33,11 @@ impl TopLevelId<Id> for Id {
 }
 
 fn main() {
-    let Cli { slot, output } = Cli::parse();
+    let Cli {
+        slot,
+        output,
+        verbose,
+    } = Cli::parse();
     let rpc_url = std::env::var("SOLANA_RPC_URL")
         .unwrap_or("https://api.mainnet-beta.solana.com".to_string());
 
@@ -136,7 +143,7 @@ fn main() {
 
             // Add edges to graphia input graph.
             for target in unblocked {
-                if !prio_graph.is_blocked(target) {
+                if !prio_graph.is_blocked(target) || verbose {
                     graphia_input.graph.edges.push(GraphiaInputEdge {
                         id: edge_count.to_string(),
                         source: popped.0.to_string(),
